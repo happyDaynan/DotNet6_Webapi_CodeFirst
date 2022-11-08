@@ -7,13 +7,21 @@ namespace Net6_Webapi.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private static List<Employee> empData = new List<Employee>
+        private static List<Employee> empData = new()
         {
             new Employee {
+                Id = 1,
                 FirstName = "Alen",
                 LastName = "Wu",
                 Birthday = "2022-01-01",
                 Address = "KaohsiungCity"
+            },
+            new Employee {
+                Id=2,
+                FirstName = "Tony",
+                LastName = "Stark",
+                Birthday = "1989-10-12",
+                Address = "TaipeiCity"
             },
         };
 
@@ -24,6 +32,14 @@ namespace Net6_Webapi.Controllers
         {           
 
             return Ok(empData);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Employee>> Getemp(int id)
+        {
+            var emp = empData.Find(x => x.Id == id);
+
+            return (emp is null) ? BadRequest("Emp not found"): Ok(emp);            
         }
 
         [HttpPost]
