@@ -70,5 +70,22 @@ namespace Net6_Webapi.Controllers
             return Ok(empData);
         }
 
+        // Delete data
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<Employee>>> Deleteemp(int id)
+        {
+            var emp = empData.Find(x => x.Id == id);
+
+            if (emp is null)
+            {
+                return BadRequest("Emp not found");
+            }
+
+            empData.Remove(emp);
+
+            return Ok(empData);
+        }
+
+
     }
 }
