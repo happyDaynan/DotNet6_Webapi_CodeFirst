@@ -9,6 +9,6 @@
 
         public string Address { get; set; } = string.Empty;
 
-        public DateTime Birthday { get; set; } = DateTime.Now;
+        public string Birthday { get; set; } = string.Empty;
     }
 }
