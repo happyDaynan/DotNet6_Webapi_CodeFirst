@@ -26,7 +26,7 @@ namespace Net6_Webapi.Controllers
         };
 
 
-
+        // Get all data
         [HttpGet]
         public async Task<ActionResult<List<Employee>>> GetAllemp()
         {           
@@ -34,6 +34,7 @@ namespace Net6_Webapi.Controllers
             return Ok(empData);
         }
 
+        // Get Single data
         [HttpGet("{id}")]
         public async Task<ActionResult<Employee>> Getemp(int id)
         {
@@ -42,11 +43,32 @@ namespace Net6_Webapi.Controllers
             return (emp is null) ? BadRequest("Emp not found"): Ok(emp);            
         }
 
+        // Add new data
         [HttpPost]
         public async Task<ActionResult<List<Employee>>> Addemp(Employee newemp)
         {
             empData.Add(newemp);
             return Ok(empData);
         }
+
+        // Update data
+        [HttpPut]
+        public async Task<ActionResult<Employee>> Updateemp(Employee requestEmp)
+        {
+            var updatedata = empData.Find(x => x.Id == requestEmp.Id);
+
+            if(updatedata is null)
+            {
+                return BadRequest("Emp not found");
+            }
+
+            updatedata.FirstName = requestEmp.FirstName;
+            updatedata.LastName = requestEmp.LastName;
+            updatedata.Birthday = requestEmp.Birthday;
+            updatedata.Address = requestEmp.Address;
+
+            return Ok(empData);
+        }
+
     }
 }
