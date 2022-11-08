@@ -53,7 +53,7 @@ namespace Net6_Webapi.Controllers
 
         // Update data
         [HttpPut]
-        public async Task<ActionResult<Employee>> Updateemp(Employee requestEmp)
+        public async Task<ActionResult<List<Employee>>> Updateemp(Employee requestEmp)
         {
             var updatedata = empData.Find(x => x.Id == requestEmp.Id);
 
