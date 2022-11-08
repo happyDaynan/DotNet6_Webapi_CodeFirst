@@ -21,9 +21,15 @@ namespace Net6_Webapi.Controllers
 
         [HttpGet]
         public async Task<ActionResult<List<Employee>>> GetAllemp()
-        {
-            
+        {           
 
+            return Ok(empData);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<List<Employee>>> Addemp(Employee newemp)
+        {
+            empData.Add(newemp);
             return Ok(empData);
         }
     }
