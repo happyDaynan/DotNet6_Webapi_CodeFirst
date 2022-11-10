@@ -25,6 +25,13 @@ namespace Net6_Webapi.Controllers
             },
         };
 
+        private readonly DataContext _context;
+
+        public EmployeeController(DataContext context)
+        {
+            _context = context;
+        }
+
 
         // Get all data
         [HttpGet]
