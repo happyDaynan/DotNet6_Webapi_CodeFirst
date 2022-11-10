@@ -7,38 +7,25 @@ namespace Net6_Webapi.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private static List<Employee> empData = new()
-        {
-            new Employee {
-                Id = 1,
-                FirstName = "Alen",
-                LastName = "Wu",
-                Birthday = "2022-01-01",
-                Address = "KaohsiungCity"
-            },
-            new Employee {
-                Id=2,
-                FirstName = "Tony",
-                LastName = "Stark",
-                Birthday = "1989-10-12",
-                Address = "TaipeiCity"
-            },
-        };
+        private readonly DataContext _context;
 
+        public EmployeeController(DataContext context)
+        {
+            _context = context;
+        }
 
         // Get all data
         [HttpGet]
         public async Task<ActionResult<List<Employee>>> GetAllemp()
-        {           
-
-            return Ok(empData);
+        {          
+            return Ok(await _context.Employees.ToArrayAsync());
         }
 
         // Get Single data
         [HttpGet("{id}")]
         public async Task<ActionResult<Employee>> Getemp(int id)
         {
-            var emp = empData.Find(x => x.Id == id);
+            var emp = await _context.Employees.FindAsync(id);
 
             return (emp is null) ? BadRequest("Emp not found"): Ok(emp);            
         }
@@ -47,15 +34,17 @@ namespace Net6_Webapi.Controllers
         [HttpPost]
         public async Task<ActionResult<List<Employee>>> Addemp(Employee newemp)
         {
-            empData.Add(newemp);
-            return Ok(empData);
+            _context.Employees.Add(newemp);
+            await _context.SaveChangesAsync();            
+            
+            return Ok(await _context.Employees.ToArrayAsync());
         }
 
         // Update data
         [HttpPut]
         public async Task<ActionResult<List<Employee>>> Updateemp(Employee requestEmp)
         {
-            var updatedata = empData.Find(x => x.Id == requestEmp.Id);
+            var updatedata = await _context.Employees.FindAsync(requestEmp.Id);            
 
             if(updatedata is null)
             {
@@ -67,25 +56,27 @@ namespace Net6_Webapi.Controllers
             updatedata.Birthday = requestEmp.Birthday;
             updatedata.Address = requestEmp.Address;
 
-            return Ok(empData);
+            await _context.SaveChangesAsync();
+
+            return Ok(await _context.Employees.ToArrayAsync());
         }
 
         // Delete data
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Employee>>> Deleteemp(int id)
         {
-            var emp = empData.Find(x => x.Id == id);
+            var emp = await _context.Employees.FindAsync(id);
 
             if (emp is null)
             {
                 return BadRequest("Emp not found");
             }
+            
+            _context.Remove(emp);
+            await _context.SaveChangesAsync();
 
-            empData.Remove(emp);
-
-            return Ok(empData);
+            return Ok(await _context.Employees.ToArrayAsync());
         }
-
 
     }
 }
